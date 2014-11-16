@@ -100,7 +100,6 @@ namespace Core.Model
             switch (neighborsCount)
             {
                 case 0:
-                    goto case 1;
                 case 1:
                     return CellType.Dead;
 
@@ -110,19 +109,8 @@ namespace Core.Model
                 case 3:
                     return CellType.Alive;
 
-                case 4:
-                    goto case 8;
-                case 5:
-                    goto case 8;
-                case 6:
-                    goto case 8;
-                case 7:
-                    goto case 8;
-                case 8:
-                    return CellType.Dead;
-
                 default:
-                    return _board[x, y];
+                    return CellType.Dead;
             }
         }
 
