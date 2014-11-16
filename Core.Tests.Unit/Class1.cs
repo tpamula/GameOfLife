@@ -81,9 +81,15 @@ namespace Core.Tests.Unit
         private CellType GetNextState(CellType[,] board, int x, int y)
         {
             int neighborsCount = GetNeighborsCount(_board, x, y);
+            var currentCellState = board[x, y];
 
             switch (neighborsCount)
             {
+                case 0:
+                    goto case 1;
+                case 1:
+                    return CellType.Dead;
+
                 default:
                     return _board[x, y];
             }
@@ -99,6 +105,7 @@ namespace Core.Tests.Unit
                 {
                     if (i < 0 || i >= board.GetLength(0)) continue;
                     if (j < 0 || j >= board.GetLength(1)) continue;
+                    if (i == x || j == y) continue;
 
                     if (board[i, j] == CellType.Alive) neighborsCount++;
                 }
