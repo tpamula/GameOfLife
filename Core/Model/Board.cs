@@ -1,12 +1,12 @@
-﻿using System;
-using Core.Enums;
+﻿using Core.Enums;
+using System;
 
 namespace Core.Model
 {
     public class Board
     {
-        private const int XSize = 10;
-        private const int YSize = 10;
+        private const int XSize = 70;
+        private const int YSize = 70;
         private CellType[,] _board = new CellType[XSize, YSize];
 
         public Board(bool randomized = false)
@@ -14,17 +14,10 @@ namespace Core.Model
             if (randomized) Randomize();
         }
 
-        private void Randomize()
+        public CellType[,] Presentation
         {
-            var random = new Random(Guid.NewGuid().GetHashCode());
-
-            for (int i = 0; i < _board.GetLength(0); i++)
-            {
-                for (int j = 0; j < _board.GetLength(1); j++)
-                {
-                    _board[i, j] = (CellType)random.Next(0, 2);
-                }
-            }
+            get { return _board; }
+            set { _board = value; }
         }
 
         public CellType this[int x, int y]
@@ -46,6 +39,25 @@ namespace Core.Model
             }
 
             _board = newBoardState;
+        }
+
+        private int GetNeighborsCount(CellType[,] board, int x, int y)
+        {
+            int neighborsCount = 0;
+
+            for (int i = x - 1; i <= x + 1; i++)
+            {
+                for (int j = y - 1; j <= y + 1; j++)
+                {
+                    if (i < 0 || i >= board.GetLength(0)) continue;
+                    if (j < 0 || j >= board.GetLength(1)) continue;
+                    if (i == x && j == y) continue;
+
+                    if (board[i, j] == CellType.Alive) neighborsCount++;
+                }
+            }
+
+            return neighborsCount;
         }
 
         private CellType GetNextState(CellType[,] board, int x, int y)
@@ -74,23 +86,17 @@ namespace Core.Model
             }
         }
 
-        private int GetNeighborsCount(CellType[,] board, int x, int y)
+        private void Randomize()
         {
-            int neighborsCount = 0;
+            var random = new Random(Guid.NewGuid().GetHashCode());
 
-            for (int i = x - 1; i <= x + 1; i++)
+            for (int i = 0; i < _board.GetLength(0); i++)
             {
-                for (int j = y - 1; j <= y + 1; j++)
+                for (int j = 0; j < _board.GetLength(1); j++)
                 {
-                    if (i < 0 || i >= board.GetLength(0)) continue;
-                    if (j < 0 || j >= board.GetLength(1)) continue;
-                    if (i == x && j == y) continue;
-
-                    if (board[i, j] == CellType.Alive) neighborsCount++;
+                    _board[i, j] = random.Next(0, 100) < 10 ? CellType.Alive : CellType.Dead;
                 }
             }
-
-            return neighborsCount;
         }
     }
 }

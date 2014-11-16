@@ -1,0 +1,30 @@
+﻿body {
+    text-align: center;
+}
+
+h2 {
+    display: inline-block;
+}
+
+#github {
+    display: inline-block;
+    vertical-align: super;
+    font-size: smaller;
+}
+
+#board {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 600px;
+    height: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    #board tr, #board td {
+        border: 1px solid green;
+    }
+
+    #board .filled {
+        background-color: green;
+    }
