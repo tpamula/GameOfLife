@@ -21,22 +21,33 @@ namespace Core.Tests.Unit
         public void should_stay_alive_with_two_neighbors()
         {
             var board = new Board();
-            board[0, 1] = board[0, 2] = board[0, 3] = CellType.Alive;
+            board[0, 1] = board[0, 2] = board[1, 1] = CellType.Alive;
 
             board.NextGeneration();
 
-            board[0, 3].ShouldBe(CellType.Alive);
+            board[1, 1].ShouldBe(CellType.Alive);
+        }
+
+        [Fact]
+        public void should_stay_alive_with_three_neighbors()
+        {
+            var board = new Board();
+            board[0, 1] = board[0, 2] = board[1, 1] = CellType.Alive;
+
+            board.NextGeneration();
+
+            board[1, 1].ShouldBe(CellType.Alive);
         }
 
         [Fact]
         public void should_die_with_four_neighbors()
         {
             var board = new Board();
-            board[0, 1] = board[0, 2] = board[0, 3] = board[1, 1] = CellType.Alive;
+            board[0, 1] = board[0, 2] = board[0, 3] = board[1, 1] = board[2, 1] = CellType.Alive;
 
             board.NextGeneration();
 
-            board[1, 1].ShouldBe(CellType.Dead);
+            board[2, 1].ShouldBe(CellType.Dead);
         }
 
         [Fact]
@@ -47,7 +58,7 @@ namespace Core.Tests.Unit
 
             board.NextGeneration();
 
-            board[2, 1].ShouldBe(CellType.Alive);
+            board[1, 2].ShouldBe(CellType.Alive);
         }
     }
 
@@ -90,6 +101,15 @@ namespace Core.Tests.Unit
                 case 1:
                     return CellType.Dead;
 
+                case 2:
+                    return currentCellState == CellType.Alive ? CellType.Alive : CellType.Dead;
+
+                case 3:
+                    return CellType.Alive;
+
+                case 4:
+                    return CellType.Dead;
+
                 default:
                     return _board[x, y];
             }
@@ -105,7 +125,7 @@ namespace Core.Tests.Unit
                 {
                     if (i < 0 || i >= board.GetLength(0)) continue;
                     if (j < 0 || j >= board.GetLength(1)) continue;
-                    if (i == x || j == y) continue;
+                    if (i == x && j == y) continue;
 
                     if (board[i, j] == CellType.Alive) neighborsCount++;
                 }
