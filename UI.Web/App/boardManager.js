@@ -1,13 +1,15 @@
 ﻿(function boardManager() {
     "use strict";
-    var previousResponse;
+    var currentState;
+    var preloadedState;
+    var address = "/api/Board";
 
     $(document).ready(function () {
-        showNextGeneration();
-
-        setInterval(function () {
-            showNextGeneration();
-        }, 400);
+        preloadState(function () {
+            setInterval(function () {
+                showNextGeneration();
+            }, 850);
+        });
     });
 
     Handlebars.registerHelper('if_eq', function (a, b, opts) {
@@ -24,19 +26,24 @@
     var template = Handlebars.compile(rawTemplate);
 
     function showNextGeneration() {
-        console.log("next generation");
-        var address = "/api/Board";
+        var html = template(preloadedState);
+        $("#board-container").html(html);
+        currentState = preloadedState;
 
+        preloadState();
+    }
+
+    function preloadState(callback) {
         $.ajax({
             type: "POST",
             url: address,
-            data: JSON.stringify(previousResponse),
+            data: JSON.stringify(currentState),
             contentType: "application/json",
             success: function (response) {
-                previousResponse = response;
-                var html = template(response);
-                $("#board-container").html(html);
+                preloadedState = response;
             }
         });
+
+        if (callback) callback();
     }
 }(window.BoardManager = window.BoardManager || {}));

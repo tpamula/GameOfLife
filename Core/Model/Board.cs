@@ -3,7 +3,7 @@ using System;
 
 namespace Core.Model
 {
-    // TODO: neighbors methods and variables could be pulled to an external class
+    // TODO: neighbors' methods and variables could be pulled to an external class
     public class Board
     {
         /// <summary>
@@ -11,8 +11,8 @@ namespace Core.Model
         /// </summary>
         private const double ChanceOfCreation = 0.17;
 
-        private const int XSize = 50;
-        private const int YSize = 50;
+        private const int XSize = 60;
+        private const int YSize = 60;
 
         /// <summary>
         /// Size of array is increased in order to skip border checks in computations;
