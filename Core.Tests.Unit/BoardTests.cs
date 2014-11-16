@@ -1,4 +1,6 @@
-﻿using Xunit;
+﻿using Core.Enums;
+using Core.Model;
+using Xunit;
 using Xunit.Should;
 
 namespace Core.Tests.Unit

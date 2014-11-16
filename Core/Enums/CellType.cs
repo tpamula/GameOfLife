@@ -1,4 +1,4 @@
-﻿namespace Core.Tests.Unit
+﻿namespace Core.Enums
 {
     public enum CellType
     {

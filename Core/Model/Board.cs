@@ -1,10 +1,31 @@
-﻿namespace Core.Tests.Unit
+﻿using System;
+using Core.Enums;
+
+namespace Core.Model
 {
     public class Board
     {
         private const int XSize = 10;
         private const int YSize = 10;
         private CellType[,] _board = new CellType[XSize, YSize];
+
+        public Board(bool randomized = false)
+        {
+            if (randomized) Randomize();
+        }
+
+        private void Randomize()
+        {
+            var random = new Random(Guid.NewGuid().GetHashCode());
+
+            for (int i = 0; i < _board.GetLength(0); i++)
+            {
+                for (int j = 0; j < _board.GetLength(1); j++)
+                {
+                    _board[i, j] = (CellType)random.Next(0, 2);
+                }
+            }
+        }
 
         public CellType this[int x, int y]
         {
