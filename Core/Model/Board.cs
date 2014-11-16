@@ -3,15 +3,29 @@ using System;
 
 namespace Core.Model
 {
+    // TODO: neighbors methods and variables could be pulled to an external class
     public class Board
     {
-        private const int XSize = 70;
-        private const int YSize = 70;
+        /// <summary>
+        /// Chance of cell being alive when creating a randomized board.
+        /// </summary>
+        private const double ChanceOfCreation = 0.17;
+
+        private const int XSize = 50;
+        private const int YSize = 50;
+
+        /// <summary>
+        /// Size of array is increased in order to skip border checks in computations;
+        /// </summary>
+        private readonly int[,] _neighborsCount = new int[XSize + 2, YSize + 2];
+
         private CellType[,] _board = new CellType[XSize, YSize];
+
+        private bool _neighborsComputed;
 
         public Board(bool randomized = false)
         {
-            if (randomized) Randomize();
+            if (randomized) RandomizeBoard();
         }
 
         public CellType[,] Presentation
@@ -41,23 +55,41 @@ namespace Core.Model
             _board = newBoardState;
         }
 
-        private int GetNeighborsCount(CellType[,] board, int x, int y)
+        private void ComputeNeighbors(CellType[,] board)
         {
-            int neighborsCount = 0;
-
-            for (int i = x - 1; i <= x + 1; i++)
+            for (int i = 0; i < board.GetLength(0); i++)
             {
-                for (int j = y - 1; j <= y + 1; j++)
+                for (int j = 0; j < board.GetLength(1); j++)
                 {
-                    if (i < 0 || i >= board.GetLength(0)) continue;
-                    if (j < 0 || j >= board.GetLength(1)) continue;
-                    if (i == x && j == y) continue;
+                    if (board[i, j] == CellType.Alive)
+                    {
+                        // translated coordinates because of difference
+                        // in sizes between board and _neighborsCount arrays
+                        int tI = i + 1;
+                        int tJ = j + 1;
 
-                    if (board[i, j] == CellType.Alive) neighborsCount++;
+                        _neighborsCount[tI - 1, tJ - 1]++;
+                        _neighborsCount[tI - 1, tJ]++;
+                        _neighborsCount[tI - 1, tJ + 1]++;
+                        _neighborsCount[tI + 1, tJ - 1]++;
+                        _neighborsCount[tI + 1, tJ]++;
+                        _neighborsCount[tI + 1, tJ + 1]++;
+                        _neighborsCount[tI, tJ + 1]++;
+                        _neighborsCount[tI, tJ - 1]++;
+                    }
                 }
             }
+        }
 
-            return neighborsCount;
+        private int GetNeighborsCount(CellType[,] board, int x, int y)
+        {
+            if (!_neighborsComputed)
+            {
+                ComputeNeighbors(board);
+                _neighborsComputed = true;
+            }
+
+            return _neighborsCount[x + 1, y + 1];
         }
 
         private CellType GetNextState(CellType[,] board, int x, int y)
@@ -79,6 +111,14 @@ namespace Core.Model
                     return CellType.Alive;
 
                 case 4:
+                    goto case 8;
+                case 5:
+                    goto case 8;
+                case 6:
+                    goto case 8;
+                case 7:
+                    goto case 8;
+                case 8:
                     return CellType.Dead;
 
                 default:
@@ -86,7 +126,7 @@ namespace Core.Model
             }
         }
 
-        private void Randomize()
+        private void RandomizeBoard()
         {
             var random = new Random(Guid.NewGuid().GetHashCode());
 
@@ -94,7 +134,7 @@ namespace Core.Model
             {
                 for (int j = 0; j < _board.GetLength(1); j++)
                 {
-                    _board[i, j] = random.Next(0, 100) < 10 ? CellType.Alive : CellType.Dead;
+                    _board[i, j] = random.Next(0, 100) < ChanceOfCreation * 100 ? CellType.Alive : CellType.Dead;
                 }
             }
         }
