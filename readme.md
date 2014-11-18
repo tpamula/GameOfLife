@@ -1,20 +1,16 @@
 Game of Life
 ============
 
-Demo
-----
+Description
+-----------
 
-A demo can be found [here](http://tppgameoflife.azurewebsites.net/).
+A [John Conway's Game of Life](http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) implementation. Written with a TDD approach. Feedback welcomed!
 
 Screenshot
 ----------
 
 ![Screenshot](screenshot.png)
 
-Description
------------
-
-A [John Conway's Game of Life](http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) implementation. Written with a TDD approach. Feedback welcomed!
 
 Technologies used
 -----------------
