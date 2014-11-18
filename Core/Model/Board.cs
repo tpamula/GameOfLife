@@ -99,10 +99,6 @@ namespace Core.Model
 
             switch (neighborsCount)
             {
-                case 0:
-                case 1:
-                    return CellType.Dead;
-
                 case 2:
                     return currentCellState == CellType.Alive ? CellType.Alive : CellType.Dead;
 
